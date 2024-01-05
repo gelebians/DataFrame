@@ -8,7 +8,7 @@ namespace Technical
     public partial class DataFrameData
     {
         Array _data;
-        public Array Değerler => _data;
+        public Array Values => _data;
         public Type Type { get; set; }
         public DataFrameData(Type type,int size)
         {
