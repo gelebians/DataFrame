@@ -72,7 +72,7 @@ namespace Technical
             for(int i=0; i< Count(); i++)
             {
                 
-                Array araveri = this._data switch
+                Array tempdata = this._data switch
                 {
                     bool?[] => new bool?[size],
                     int?[] => new int?[size],
@@ -83,7 +83,7 @@ namespace Technical
                     string?[] => new string?[size],
                     _ => throw new NotImplementedException("Unrecognized data type")
                 };
-                sonuç.Add(new DataFrameData(araveri));
+                sonuç.Add(new DataFrameData(tempdata));
                 try
                 {
                     if (i < size - 1)
@@ -98,7 +98,7 @@ namespace Technical
                     }
                     else
                     {
-                        var kesim = _data switch
+                        var slices = _data switch
                         {
                             bool?[] bool1 => new DataFrameData(bool1.Skip(i - size + 1).Take(size).ToArray()),
                             int?[] int1 => new DataFrameData(int1.Skip(i - size + 1).Take(size).ToArray()),
@@ -109,7 +109,7 @@ namespace Technical
                             string?[] string1 => new DataFrameData(string1.Skip(i - size + 1).Take(size).ToArray()),
                             _ => throw new NotImplementedException("Unrecognized data type")
                         };
-                        sonuç[i] = kesim;
+                        sonuç[i] = slices;
                     }
                 }catch(Exception e)
                 {
