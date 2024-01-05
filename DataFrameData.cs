@@ -49,29 +49,29 @@ namespace Technical
         {
             _data = _data switch
             {
-                bool?[] bool1 => Genel.DiziEkle(bool1,data),
-                int?[] int1 => Genel.DiziEkle(int1, data),
-                float?[] float1 => Genel.DiziEkle(float1, data),
-                double?[] double1 => Genel.DiziEkle(double1, data),
-                decimal?[] decimal1 => Genel.DiziEkle(decimal1, data),
-                DateTime?[] dateTime1 => Genel.DiziEkle(dateTime1, data),
-                string?[] string1 => Genel.DiziEkle(string1, data),
+                bool?[] bool1 => General.AddArray(bool1,data),
+                int?[] int1 => General.AddArray(int1, data),
+                float?[] float1 => General.AddArray(float1, data),
+                double?[] double1 => General.AddArray(double1, data),
+                decimal?[] decimal1 => General.AddArray(decimal1, data),
+                DateTime?[] dateTime1 => General.AddArray(dateTime1, data),
+                string?[] string1 => General.AddArray(string1, data),
                 _ => throw new NotImplementedException("Unrecognized data type")
             };
         }
         public void Add(int index,IConvertible? data)
         {
-            if (index >= 0 && index < Toplam())
+            if (index >= 0 && index < Count())
             {
                 _data = _data switch
                 {
-                    bool?[] bool1 => Genel.DiziEkle(bool1,index,data),
-                    int?[] int1 => Genel.DiziEkle(int1, index, data),
-                    float?[] float1 => Genel.DiziEkle(float1, index, data),
-                    double?[] double1 => Genel.DiziEkle(double1, index, data),
-                    decimal?[] decimal1 => Genel.DiziEkle(decimal1, index, data),
-                    DateTime?[] dateTime1 => Genel.DiziEkle(dateTime1, index, data),
-                    string?[] string1 => Genel.DiziEkle(string1, index, data),
+                    bool?[] bool1 => General.AddArray(bool1,index,data),
+                    int?[] int1 => General.AddArray(int1, index, data),
+                    float?[] float1 => General.AddArray(float1, index, data),
+                    double?[] double1 => General.AddArray(double1, index, data),
+                    decimal?[] decimal1 => General.AddArray(decimal1, index, data),
+                    DateTime?[] dateTime1 => General.AddArray(dateTime1, index, data),
+                    string?[] string1 => General.AddArray(string1, index, data),
                     _ => throw new NotImplementedException("Unrecognized data type")
                 };
             }
@@ -83,17 +83,17 @@ namespace Technical
         }
         public void Delete(int index)
         {
-            if (index >= 0 && index < Toplam())
+            if (index >= 0 && index < Count())
             {
                 _data = _data switch
                 {
-                    bool?[] bool1 => Genel.DiziSil(bool1,index),
-                    int?[] int1 => Genel.DiziSil(int1, index),
-                    float?[] float1 => Genel.DiziSil(float1, index),
-                    double?[] double1 => Genel.DiziSil(double1, index),
-                    decimal?[] decimal1 => Genel.DiziSil(decimal1, index),
-                    DateTime?[] dateTime1 => Genel.DiziSil(dateTime1, index),
-                    string?[] string1 => Genel.DiziSil(string1, index),
+                    bool?[] bool1 => General.DeleteArray(bool1,index),
+                    int?[] int1 => General.DeleteArray(int1, index),
+                    float?[] float1 => General.DeleteArray(float1, index),
+                    double?[] double1 => General.DeleteArray(double1, index),
+                    decimal?[] decimal1 => General.DeleteArray(decimal1, index),
+                    DateTime?[] dateTime1 => General.DeleteArray(dateTime1, index),
+                    string?[] string1 => General.DeleteArray(string1, index),
                     _ => throw new NotImplementedException("Unrecognized data type")
                 };
             }
@@ -105,21 +105,21 @@ namespace Technical
         public void Clear()
         {
             if (Type == typeof(bool))
-                _data = new bool?[Toplam()];
+                _data = new bool?[Count()];
             else if (Type == typeof(int))
-                _data = new int?[Toplam()];
+                _data = new int?[Count()];
             else if (Type == typeof(float))
-                _data = new float?[Toplam()];
+                _data = new float?[Count()];
             else if (Type == typeof(double))
-                _data = new double?[Toplam()];
+                _data = new double?[Count()];
             else if (Type == typeof(decimal))
-                _data = new decimal?[Toplam()];
+                _data = new decimal?[Count()];
             else if (Type == typeof(DateTime))
-                _data = new DateTime?[Toplam()];
+                _data = new DateTime?[Count()];
             else if (Type == typeof(string))
-                _data = new string?[Toplam()];
+                _data = new string?[Count()];
             else
-                Genel.Loglayıcı.Error("Unrecognized data type:(" + Type.Name + ") DataFrameData.Clear()");
+                General.Loglayıcı.Error("Unrecognized data type:(" + Type.Name + ") DataFrameData.Clear()");
         }
         public override string ToString()
         {
@@ -141,13 +141,13 @@ namespace Technical
         {
             Array data = _data switch
             {
-                bool?[] bool1 => Genel.Birleştir(new bool?[count], bool1.Take(Toplam() - count).ToArray()),
-                int?[] int1 => Genel.Birleştir(new int?[count],int1.Take(Toplam() - count).ToArray()),
-                float?[] float1 => Genel.Birleştir(new float?[count], float1.Take(Toplam() - count).ToArray()),
-                double?[] double1 => Genel.Birleştir(new double?[count], double1.Take(Toplam() - count).ToArray()),
-                decimal?[] decimal1 => Genel.Birleştir(new decimal?[count], decimal1.Take(Toplam() - count).ToArray()),
-                DateTime?[] dateTime1 => Genel.Birleştir(new DateTime?[count], dateTime1.Take(Toplam() - count).ToArray()),
-                string?[] string1 => Genel.Birleştir(new string?[count], string1.Take(Toplam() - count).ToArray()),
+                bool?[] bool1 => General.Join(new bool?[count], bool1.Take(Count() - count).ToArray()),
+                int?[] int1 => General.Join(new int?[count],int1.Take(Count() - count).ToArray()),
+                float?[] float1 => General.Join(new float?[count], float1.Take(Count() - count).ToArray()),
+                double?[] double1 => General.Join(new double?[count], double1.Take(Count() - count).ToArray()),
+                decimal?[] decimal1 => General.Join(new decimal?[count], decimal1.Take(Count() - count).ToArray()),
+                DateTime?[] dateTime1 => General.Join(new DateTime?[count], dateTime1.Take(Count() - count).ToArray()),
+                string?[] string1 => General.Join(new string?[count], string1.Take(Count() - count).ToArray()),
                 _ => throw new NotImplementedException("Unrecognized data type")
             };
 
@@ -157,13 +157,13 @@ namespace Technical
         {
             Array data = _data switch
             {
-                bool?[] bool1 => Genel.Birleştir(bool1.Skip(count).Take(Toplam() - count).ToArray(), new bool?[count]),
-                int?[] int1 => Genel.Birleştir(int1.Skip(count).Take(Toplam() - count).ToArray(), new int?[count]),
-                float?[] float1 => Genel.Birleştir(float1.Skip(count).Take(Toplam() - count).ToArray(), new float?[count]),
-                double?[] double1 => Genel.Birleştir(double1.Skip(count).Take(Toplam() - count).ToArray(), new double?[count]),
-                decimal?[] decimal1 => Genel.Birleştir(decimal1.Skip(count).Take(Toplam() - count).ToArray(), new decimal?[count]),
-                DateTime?[] dateTime1 => Genel.Birleştir(dateTime1.Skip(count).Take(Toplam() - count).ToArray(), new DateTime?[count]),
-                string?[] string1 => Genel.Birleştir(string1.Skip(count).Take(Toplam() - count).ToArray(), new string?[count]),
+                bool?[] bool1 => General.Join(bool1.Skip(count).Take(Count() - count).ToArray(), new bool?[count]),
+                int?[] int1 => General.Join(int1.Skip(count).Take(Count() - count).ToArray(), new int?[count]),
+                float?[] float1 => General.Join(float1.Skip(count).Take(Count() - count).ToArray(), new float?[count]),
+                double?[] double1 => General.Join(double1.Skip(count).Take(Count() - count).ToArray(), new double?[count]),
+                decimal?[] decimal1 => General.Join(decimal1.Skip(count).Take(Count() - count).ToArray(), new decimal?[count]),
+                DateTime?[] dateTime1 => General.Join(dateTime1.Skip(count).Take(Count() - count).ToArray(), new DateTime?[count]),
+                string?[] string1 => General.Join(string1.Skip(count).Take(Count() - count).ToArray(), new string?[count]),
                 _ => throw new NotImplementedException("Unrecognized data type")
             };
 
@@ -191,7 +191,7 @@ namespace Technical
                 throw new Exception("action cannot be left blank");
             }
 
-            for (int i = 0; i < Toplam(); i++)
+            for (int i = 0; i < Count(); i++)
             {
                 action(this[i]);
             }
