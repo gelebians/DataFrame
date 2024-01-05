@@ -31,7 +31,7 @@ namespace Technical
                 }
                 else
                 {
-                    Genel.Loglayıcı.Error("Index belirtilen aralık dışındaydı.: DataFrameData.this[int index]");
+                    throw new Exception("Index was outside the specified range.: DataFrameData.this[int index]");
                     return null;
                 }
             }
@@ -41,32 +41,32 @@ namespace Technical
                     _data.SetValue(value, index);
             }
         }
-        public DataFrameData this[int index,int boyut]
+        public DataFrameData this[int index,int size]
         {
             get
             {
-                if (index < this.Count() && index >= 0 && index < boyut && boyut < this.Count())
+                if (index < this.Count() && index >= 0 && index < size && size < this.Count())
                 {
                     return _data switch
                     {
-                        bool?[] bool1 => new DataFrameData(bool1.Skip(index).Take(boyut).ToArray()),
-                        int?[] int1 => new DataFrameData(int1.Skip(index).Take(boyut).ToArray()),
-                        float?[] float1 => new DataFrameData(float1.Skip(index).Take(boyut).ToArray()),
-                        double?[] double1 => new DataFrameData(double1.Skip(index).Take(boyut).ToArray()),
-                        decimal?[] decimal1 => new DataFrameData(decimal1.Skip(index).Take(boyut).ToArray()),
-                        DateTime?[] dateTime1 => new DataFrameData(dateTime1.Skip(index).Take(boyut).ToArray()),
-                        string?[] string1 => new DataFrameData(string1.Skip(index).Take(boyut).ToArray()),
+                        bool?[] bool1 => new DataFrameData(bool1.Skip(index).Take(size).ToArray()),
+                        int?[] int1 => new DataFrameData(int1.Skip(index).Take(size).ToArray()),
+                        float?[] float1 => new DataFrameData(float1.Skip(index).Take(size).ToArray()),
+                        double?[] double1 => new DataFrameData(double1.Skip(index).Take(size).ToArray()),
+                        decimal?[] decimal1 => new DataFrameData(decimal1.Skip(index).Take(size).ToArray()),
+                        DateTime?[] dateTime1 => new DataFrameData(dateTime1.Skip(index).Take(size).ToArray()),
+                        string?[] string1 => new DataFrameData(string1.Skip(index).Take(size).ToArray()),
                         _ => throw new NotImplementedException("Unrecognized data type")
                     };
                 }
                 else
                 {
-                    Genel.Loglayıcı.Error("Index belirtilen aralık dışındaydı.: DataFrameData.this[int index, int boyut]");
+                    throw new Exception("Index was outside the specified range.: DataFrameData.this[int index, int size]");
                     return null;
                 }
             }
         }
-        public List<DataFrameData> Rolling(int boyut)
+        public List<DataFrameData> Rolling(int size)
         {
             List<DataFrameData> sonuç = new List<DataFrameData>(Count());
             for(int i=0; i< Count(); i++)
@@ -74,46 +74,46 @@ namespace Technical
                 
                 Array araveri = this._data switch
                 {
-                    bool?[] => new bool?[boyut],
-                    int?[] => new int?[boyut],
-                    float?[] => new float?[boyut],
-                    double?[] => new double?[boyut],
-                    decimal?[] => new decimal?[boyut],
-                    DateTime?[] => new DateTime?[boyut],
-                    string?[] => new string?[boyut],
+                    bool?[] => new bool?[size],
+                    int?[] => new int?[size],
+                    float?[] => new float?[size],
+                    double?[] => new double?[size],
+                    decimal?[] => new decimal?[size],
+                    DateTime?[] => new DateTime?[size],
+                    string?[] => new string?[size],
                     _ => throw new NotImplementedException("Unrecognized data type")
                 };
                 sonuç.Add(new DataFrameData(araveri));
                 try
                 {
-                    if (i < boyut - 1)
+                    if (i < size - 1)
                     {
-                        for (int j = i; j < boyut + i; j++)
+                        for (int j = i; j < size + i; j++)
                         {
-                            if (j < boyut - 1)
+                            if (j < size - 1)
                                 sonuç[i][j - i] = null;
                             else
-                                sonuç[i][j - i] = this[j - boyut + 1];
+                                sonuç[i][j - i] = this[j - size + 1];
                         }
                     }
                     else
                     {
                         var kesim = _data switch
                         {
-                            bool?[] bool1 => new DataFrameData(bool1.Skip(i - boyut + 1).Take(boyut).ToArray()),
-                            int?[] int1 => new DataFrameData(int1.Skip(i - boyut + 1).Take(boyut).ToArray()),
-                            float?[] float1 => new DataFrameData(float1.Skip(i - boyut + 1).Take(boyut).ToArray()),
-                            double?[] double1 => new DataFrameData(double1.Skip(i - boyut + 1).Take(boyut).ToArray()),
-                            decimal?[] decimal1 => new DataFrameData(decimal1.Skip(i - boyut + 1).Take(boyut).ToArray()),
-                            DateTime?[] dateTime1 => new DataFrameData(dateTime1.Skip(i - boyut + 1).Take(boyut).ToArray()),
-                            string?[] string1 => new DataFrameData(string1.Skip(i - boyut + 1).Take(boyut).ToArray()),
+                            bool?[] bool1 => new DataFrameData(bool1.Skip(i - size + 1).Take(size).ToArray()),
+                            int?[] int1 => new DataFrameData(int1.Skip(i - size + 1).Take(size).ToArray()),
+                            float?[] float1 => new DataFrameData(float1.Skip(i - size + 1).Take(size).ToArray()),
+                            double?[] double1 => new DataFrameData(double1.Skip(i - size + 1).Take(size).ToArray()),
+                            decimal?[] decimal1 => new DataFrameData(decimal1.Skip(i - size + 1).Take(size).ToArray()),
+                            DateTime?[] dateTime1 => new DataFrameData(dateTime1.Skip(i - size + 1).Take(size).ToArray()),
+                            string?[] string1 => new DataFrameData(string1.Skip(i - size + 1).Take(size).ToArray()),
                             _ => throw new NotImplementedException("Unrecognized data type")
                         };
                         sonuç[i] = kesim;
                     }
                 }catch(Exception e)
                 {
-                    Genel.Loglayıcı.Error("Rolling işlem hatası.: DataFrameData.Rolling(int boyut), Hata:"+e.Message);
+                    throw new Exception("Rolling operation error.: DataFrameData.Rolling(int size), Error:"+e.Message);
                 }
                 
                 
