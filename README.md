@@ -166,5 +166,7 @@ dataframe["hl2"] = (dataframe["high"]+dataframe["low"])/2;
 dataframe["sma"] = dataframe["close"].Rolling(10).Mean();
 
 //Buy Sell indicator
-dataframe["buy"] = General.Where(
+dataframe["buy"] = General.Where(dataframe["close"] < dataframe["low"].ShiftLeft(),"BUY",""); //Buy if the close is less than the previous low
+dataframe["sell"] = General.Where(dataframe["close"] > dataframe["high"].ShiftLeft(),"SELL",""); //Sell ​​if the close is higher than the previous high
+dataframe["buysell"] = dataframe["buy"].Join(dataframe["sell"],"");  //Combine buy and sell and put them in one column
 </code></br>
