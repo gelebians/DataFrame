@@ -1,15 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Technical.System;
+using ISRA.System;
 
-namespace Technical
+namespace ISRA.Data
 {
     /*
      * This application is for implementing pandas dataframe in c#.
-     * DataFrameData.operator.cs file with operator methods
+     * There are DataFrameData operators in the DataFrameData.Oprator.cs file.
      * This library was designed by PoSeYDoN.
      */
     public partial class DataFrameData
@@ -29,13 +24,13 @@ namespace Technical
                 }
                 else
                 {
-                    throw new Exception("The two data types are not the same or are not comparable types.: DataFrameData.&(DataFrameData left,DataFrameData right)");
+                    General.Logging.Error("The two data types are not the same or are not comparable types.: DataFrameData.&(DataFrameData left,DataFrameData right)");
                     return null;
                 }
             }
             else
             {
-                throw new Exception("Data sizes are not the same.: DataFrameData.&(DataFrameData left,DataFrameData right)");
+                General.Logging.Error("Data sizes are not the same.: DataFrameData.&(DataFrameData left,DataFrameData right)");
                 return null;
             }
         }
@@ -43,7 +38,7 @@ namespace Technical
         {
             if (left.Count() == right.Count())
             {
-                DataFrameData returned =new DataFrameData(typeof(bool), left.Count());
+                DataFrameData returned = new DataFrameData(typeof(bool), left.Count());
                 if (left.Type == right.Type || (left.IsNumeric() && right.IsNumeric()))
                 {
                     for (int i = 0; i < left.Count(); i++)
@@ -87,6 +82,7 @@ namespace Technical
                 throw new Exception("Data sizes are not the same.");
             }
         }
+
         public static DataFrameData operator ==(DataFrameData left, IConvertible right)
         {
             DataFrameData returned = new DataFrameData(typeof(bool), left.Count());
@@ -333,6 +329,22 @@ namespace Technical
             }
 
         }
+        public static DataFrameData operator ++(DataFrameData left)
+        {
+            DataFrameData returned = new DataFrameData(left.Type, left.Count());
+            if (left.IsNumeric())
+            {
+                for (int i = 0; i < left.Count(); i++)
+                {
+                    returned[i] = (dynamic?)left[i] + 1;
+                }
+                return returned;
+            }
+            else
+            {
+                throw new Exception("Data type is not numeric.");
+            }
+        }
         public static DataFrameData operator -(DataFrameData left, DataFrameData right)
         {
             if (left.Count() == right.Count())
@@ -387,6 +399,22 @@ namespace Technical
             else
             {
                 throw new Exception("The two data types are not the same or are not comparable types.");
+            }
+        }
+        public static DataFrameData operator --(DataFrameData left)
+        {
+            DataFrameData returned = new DataFrameData(left.Type, left.Count());
+            if (left.IsNumeric())
+            {
+                for (int i = 0; i < left.Count(); i++)
+                {
+                    returned[i] = (dynamic?)left[i] - 1;
+                }
+                return returned;
+            }
+            else
+            {
+                throw new Exception("Data type is not numeric.");
             }
         }
         public static DataFrameData operator *(DataFrameData left, DataFrameData right)
@@ -481,8 +509,8 @@ namespace Technical
                 for (int i = 0; i < left.Count(); i++)
                 {
                     if ((dynamic?)right == 0 || (dynamic?)right == null)
-                        returned[i]=null;
-                        //throw new Exception("Sıfıra bölme hatası.");
+                        returned[i] = null;
+                    //throw new Exception("Sıfıra bölme hatası.");
                     else
                         returned[i] = (dynamic?)left[i] / (dynamic?)right;
                 }
@@ -513,6 +541,62 @@ namespace Technical
                 throw new Exception("The two data types are not the same or are not comparable types.");
             }
         }
+        public static DataFrameData operator %(DataFrameData left, DataFrameData right)
+        {
+            if (left.Count() == right.Count())
+            {
+                DataFrameData returned = new DataFrameData(left.Type, left.Count());
+                if (left.Type == right.Type || (left.IsNumeric() && right.IsNumeric()))
+                {
+                    for (int i = 0; i < left.Count(); i++)
+                    {
+                        returned[i] = (dynamic?)left[i] % (dynamic?)right[i];
+                    }
+                    return returned;
+                }
+                else
+                {
+                    throw new Exception("The two data types are not the same or are not comparable types.");
+                }
+            }
+            else
+            {
+                throw new Exception("Data sizes are not the same.");
+            }
+        }
+        public static DataFrameData operator %(DataFrameData left, IConvertible? right)
+        {
+
+            DataFrameData returned = new DataFrameData(left.Type, left.Count());
+            if (left.IsNumeric() && right.IsNumeric())
+            {
+                for (int i = 0; i < left.Count(); i++)
+                {
+                    returned[i] = (dynamic?)left[i] % (dynamic)right;
+                }
+                return returned;
+            }
+            else
+            {
+                throw new Exception("The two data types are not the same or are not comparable types.");
+            }
+        }
+        public static DataFrameData operator %(IConvertible? left, DataFrameData right)
+        {
+
+            DataFrameData returned = new DataFrameData(right.Type, right.Count());
+            if (left.IsNumeric() && right.IsNumeric())
+            {
+                for (int i = 0; i < right.Count(); i++)
+                {
+                    returned[i] = (dynamic)left % (dynamic?)right[i];
+                }
+                return returned;
+            }
+            else
+            {
+                throw new Exception("The two data types are not the same or are not comparable types.");
+            }
+        }
     }
 }
- 
