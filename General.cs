@@ -374,7 +374,14 @@ namespace ISRA.System
         {
             if (datas.Count() > 0)
             {
-                return new DataFrameData(datas.Select(x=>x.Mean()).ToArray());
+                DataFrameData returned = new DataFrameData(datas.First().Type, datas.Count());
+                int i = 0;
+                foreach(var item in datas)
+                {
+                    returned[i] = item.Mean();
+                    i++;
+                }
+                return returned;
             }
             else
             {
