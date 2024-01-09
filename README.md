@@ -129,5 +129,42 @@ List&lt;DataFrameData> datalist = dataframedata.Rolling(5);</code></br>
 <br><code>DataFrameData abs = dataframedata.Diff();</code></br>
 <br><b>Clip: </b> Used to trim values at specified input threshold. We can use this function to put a lower limit and upper limit on the values that any cell can have in the dataframe.</br>
 <br><code>DataFrameData abs = dataframedata.Clip();</code></br>
-<br><b>Clip: </b> Return sample standard deviation over requested axis.</br>
+<br><b>Std: </b> Return sample standard deviation over requested axis.</br>
 <br><code>DataFrameData abs = dataframedata.Std();</code></br>
+<h2>Indexing</h2>
+<br>Returns the data given the index number</br>
+<br><code>IConvertible data = dataframedata[1];</code></br>
+<br>Index number returns data up to the size of the given number.</br>
+<br><code>DataFrameData dataframedata2 = dataframedata[1,3]; //The size of the new DataFrameData is 3</code></br>
+<h2>Operators</h2>
+<b>Contain Operators</b>
+<br><b>==, != , >, <, >=, <=, & Operators:</b></br>
+<br><code>DataFrameData newDataFrameData = dataframedata1 == dataframedata2; //The values ​​of the new dataframedata will be of type bool
+DataFrameData newDataFrameData = dataframedata1 != dataframedata2;
+DataFrameData newDataFrameData = dataframedata1 > dataframedata2;
+DataFrameData newDataFrameData = dataframedata1 & dataframedata2; //Do not use it with two & characters. It will be single & character
+    ....
+</code></br>
+<b>Math Operators</b>
+<br><b>+, -, *, /, ++, --, % Operators:</b></br>
+<br><code>DataFrameData newDataFrameData = dataframedata1 == dataframedata2; //The values ​​of the new dataframedata will be of type bool
+DataFrameData newDataFrameData = dataframedata1 + dataframedata2;
+DataFrameData newDataFrameData = dataframedata1 / dataframedata2;
+DataFrameData newDataFrameData = dataframedata1 % dataframedata2;
+DataFrameData newDataFrameData = dataframedata1++;
+    ....
+</code></br>
+<h2>Examples</h2>
+<br><code>DataFrame dataframe = new DataFrame();
+dataframe["T"] = new DataFrameData(new DateTime[5]{DateTime.Parse("01.01.2024","02.01.2024","03.01.2024","04.01.2024","05.01.2024"});
+dataframe["high"] = new DataFrameData(new decimal[5]{"5.12,6.25,5.13,8.26,15});
+dataframe["low"] = new DataFrameData(new decimal[5]{"4.48,5.15,3.27,7.55,11,45});
+dataframe["close"] = new DataFrameData(new decimal[5]{"4.51,5.18,3.51,7.99,13,74});
+dataframe["hl2"] = (dataframe["high"]+dataframe["low"])/2;
+
+//Calculate 10 days sma
+dataframe["sma"] = dataframe["close"].Rolling(10).Mean();
+
+//Buy Sell indicator
+dataframe["buy"] = General.Where(
+</code></br>
