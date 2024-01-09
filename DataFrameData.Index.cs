@@ -1,16 +1,20 @@
-using Microsoft.VisualBasic;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using Technical.System;
+using ISRA.System;
 
-namespace Technical
+namespace ISRA.Data
 {
+    /*
+     * This application is for implementing pandas dataframe in c#.
+     * There are DataFrameData Index in the DataFrameData.Math.cs file.
+     * This library was designed by PoSeYDoN.
+     */
     public partial class DataFrameData
     {
+        /// <summary>
+        /// Returns the data given the index number
+        /// </summary>
+        /// <param name="index"> index number</param>
+        /// <returns>IConvertible</returns>
+        /// <exception cref="NotImplementedException"></exception>
         public IConvertible? this[int index]
         {
             get
@@ -31,7 +35,7 @@ namespace Technical
                 }
                 else
                 {
-                    throw new Exception("Index was outside the specified range.: DataFrameData.this[int index]");
+                    General.Logging.Error("Index was outside the specified range.: DataFrameData.this[int index]");
                     return null;
                 }
             }
@@ -41,6 +45,13 @@ namespace Technical
                     _data.SetValue(value, index);
             }
         }
+        /// <summary>
+        /// Index number returns data up to the size of the given number.
+        /// </summary>
+        /// <param name="index"> index number</param>
+        /// <param name="size"> Size to be taken</param>
+        /// <returns>DataFrameData</returns>
+        /// <exception cref="NotImplementedException"></exception>
         public DataFrameData this[int index,int size]
         {
             get
@@ -61,17 +72,23 @@ namespace Technical
                 }
                 else
                 {
-                    throw new Exception("Index was outside the specified range.: DataFrameData.this[int index, int size]");
+                    General.Logging.Error("Index was outside the specified range.: DataFrameData.this[int index, int size]");
                     return null;
                 }
             }
         }
+        /// <summary>
+        /// Implementation of pandas.rolling function. For explanation: <a href="https://www.geeksforgeeks.org/python-pandas-dataframe-rolling/">here</a>
+        /// </summary>
+        /// <param name="size">Window size</param>
+        /// <returns>List&lt;DataFrameData></returns>
+        /// <exception cref="NotImplementedException"></exception>
         public List<DataFrameData> Rolling(int size)
         {
-            List<DataFrameData> sonuç = new List<DataFrameData>(Count());
-            for(int i=0; i< Count(); i++)
+            List<DataFrameData> returned = new List<DataFrameData>(Count());
+            for (int i = 0; i < Count(); i++)
             {
-                
+
                 Array tempdata = this._data switch
                 {
                     bool?[] => new bool?[size],
@@ -83,7 +100,7 @@ namespace Technical
                     string?[] => new string?[size],
                     _ => throw new NotImplementedException("Unrecognized data type")
                 };
-                sonuç.Add(new DataFrameData(tempdata));
+                returned.Add(new DataFrameData(tempdata));
                 try
                 {
                     if (i < size - 1)
@@ -91,9 +108,9 @@ namespace Technical
                         for (int j = i; j < size + i; j++)
                         {
                             if (j < size - 1)
-                                sonuç[i][j - i] = null;
+                                returned[i][j - i] = null;
                             else
-                                sonuç[i][j - i] = this[j - size + 1];
+                                returned[i][j - i] = this[j - size + 1];
                         }
                     }
                     else
@@ -109,17 +126,21 @@ namespace Technical
                             string?[] string1 => new DataFrameData(string1.Skip(i - size + 1).Take(size).ToArray()),
                             _ => throw new NotImplementedException("Unrecognized data type")
                         };
-                        sonuç[i] = slices;
+                        returned[i] = slices;
                     }
-                }catch(Exception e)
-                {
-                    throw new Exception("Rolling operation error.: DataFrameData.Rolling(int size), Error:"+e.Message);
                 }
-                
-                
+                catch (Exception e)
+                {
+                    General.Logging.Error("Rolling operation error.: DataFrameData.Rolling(int size), Error:" + e.Message);
+                }
             }
-            return sonuç;
+            return returned;
         }
+        /// <summary>
+        /// Returns the first data
+        /// </summary>
+        /// <returns>IConvertible?</returns>
+        /// <exception cref="NotImplementedException"></exception>
         public IConvertible? First()
         {
             return _data switch
@@ -134,6 +155,11 @@ namespace Technical
                 _ => throw new NotImplementedException("Unrecognized data type")
             };
         }
+        /// <summary>
+        /// Returns the last data
+        /// </summary>
+        /// <returns>IConvertible?</returns>
+        /// <exception cref="NotImplementedException"></exception>
         public IConvertible? Last()
         {
             return _data switch
