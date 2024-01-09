@@ -7,6 +7,11 @@ using Technical.System;
 
 namespace Technical
 {
+    /*
+     * This application is for implementing pandas dataframe in c#.
+     * DataFrameData.operator.cs file with operator methods
+     * This library was designed by PoSeYDoN.
+     */
     public partial class DataFrameData
     {
         public static DataFrameData operator &(DataFrameData left,DataFrameData right)
