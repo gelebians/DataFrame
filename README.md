@@ -4,7 +4,7 @@ It is the implementation of Python dataframe on C#.
 <h2>Usage Methods</h2>
 <b>Creation</b>
 <br>Create without parameters</br>
-<br><code>DataFrame = new DataFrame();</code></br>
+<br><code>DataFrame dataframe = new DataFrame();</code></br>
 <br>Create by giving column name.</br>
 <br><code>DataFrame dataframe = new DataFrame(new string[]{"col1","col2","col3");</code></br>
 <br>Creating dataframedata array and column names as parameters. The column names parameter can be left blank. In this case, alphabetical letters are determined as the column name. Ex: "A","B","C".
@@ -69,3 +69,46 @@ In this example, a new column named col1 has been added.
 <br><code>dataframe["col1",3] = 12;</code></br>
 <h1>DataFrameData</h1>
 <br>This is the most comprehensive object. Mathematical operations, comparison, averaging and square root operations can be performed with DataFrameData.</br>
+<h2>Usage Methods</h2>
+<b>Creation</b>
+<br>Create by specifying type and size</br>
+<br><code>DataFrameData dataframedata = new DataFrame(typeof(int),10);</code></br>
+<br>Create with array</br>
+<br><code>float[] array = new float[]{3.5, 2.75, 1.43, 14.6};
+DataFrameData dataframedata = new DataFrame(array);</code></br>
+<h2>DataFrameData Items</h2>
+<br><b>Values: </b> Array of values</br>
+<br><b>Type: </b> DataFrameData type of data of the data.</br>
+<h2>Methods</h2>
+<br><b>Add: </b> Add new data</br>
+<br><code>DataFrameData dataframedata = new DataFrameData(typeof(int),3);
+dataframedata.Add(5);
+dataframedata.Add(0,5); //Adding data with index number
+</code></br>
+<br><b>Delete: </b> Deletes the data given the index number</br>
+<br><code>DataFrameData dataframedata = new DataFrameData(typeof(int),3);
+dataframedata.Delete(1);</code></br>
+<br><b>Clear: </b> Clears all data</br>
+<br><code>DataFrameData dataframedata = new DataFrameData(typeof(int),3);
+dataframedata.Celar();</code></br>
+<br><b>ToString: </b> Converts data to string in tabular form</br>
+<br><code>DataFrameData dataframedata = new DataFrameData(typeof(int),3);
+Console.WriteLine(dataframedata.ToString());</code></br>
+<br><b>ShiftLeft: </b> Shifts the array to the left by the given number. Initial values ​​are assigned as null</br>
+<br><code>DataFrameData dataframedata = new DataFrameData(typeof(int),10);
+dataframedata2 = dataframedata.ShiftLeft(1);</code></br>
+<br><b>ShiftRight: </b> Shifts the array to the right by the given number. Initial values ​​are assigned as null</br>
+<br><code>DataFrameData dataframedata = new DataFrameData(typeof(int),10);
+dataframedata2 = dataframedata.ShiftRight(2);</code></br>
+<br><b>index: </b> Returns the index number of the given data</br>
+<br><code>DataFrameData dataframedata = new DataFrameData(typeof(decimal),5);
+int index = dataframedata.index(10m);</code></br>
+<br><b>ForEach: </b> Foreach method used in the list method</br>
+<br><code>DataFrameData dataframedata = new DataFrameData(typeof(decimal),7);
+dataframedata.ForEach(Console.WriteLine);</code></br>
+<br><b>Rolling: </b> Implementation of pandas.rolling function. For explanation: <a href="https://www.geeksforgeeks.org/python-pandas-dataframe-rolling/">here</a></br>
+<br><code>DataFrameData dataframedata = new DataFrameData(typeof(decimal),128);
+List&lt;DataFrameData> datalist = dataframedata.Rolling(5);</code></br>
+<br><b>First: Returns the first data</br>
+<br><code>DataFrameData dataframedata = new DataFrameData(typeof(decimal),128);
+List&lt;DataFrameData> datalist = dataframedata.Rolling(5);</code></br>
