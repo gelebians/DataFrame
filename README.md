@@ -109,6 +109,25 @@ dataframedata.ForEach(Console.WriteLine);</code></br>
 <br><b>Rolling: </b> Implementation of pandas.rolling function. For explanation: <a href="https://www.geeksforgeeks.org/python-pandas-dataframe-rolling/">here</a></br>
 <br><code>DataFrameData dataframedata = new DataFrameData(typeof(decimal),128);
 List&lt;DataFrameData> datalist = dataframedata.Rolling(5);</code></br>
-<br><b>First: Returns the first data</br>
-<br><code>DataFrameData dataframedata = new DataFrameData(typeof(decimal),128);
-List&lt;DataFrameData> datalist = dataframedata.Rolling(5);</code></br>
+<br><b>First: </b> Returns the first data</br>
+<br><code>IConvertible? data = dataframedata.First();</code></br>
+<br><b>Last: </b> Returns the last data</br>
+<br><code>IConvertible? data = dataframedata.Last();</code></br>
+<br><b>Count: </b> Returns the total number of data</br>
+<br><code>int size = dataframedata.Count();</code></br>
+<br><b>Sum: </b> Returns the total of the datas</br>
+<br><code>IConvertible sum = dataframedata.Sum();</code></br>
+<br><b>Mean: </b> Averages the datas</br>
+<br><code>IConvertible mean = dataframedata.Mean();</code></br>
+<br><b>Min: </b> Returns the minimum of all data</br>
+<br><code>IConvertible min = dataframedata.Min();</code></br>
+<br><b>Max: </b> Returns the maximum of all data</br>
+<br><code>IConvertible max = dataframedata.Max();</code></br>
+<br><b>Abs: </b> Returns the absolute value of a number</br>
+<br><code>DataFrameData abs = dataframedata.Abs();</code></br>
+<br><b>Diff: </b> Find the difference between the values for each row and the values from the previous row</br>
+<br><code>DataFrameData abs = dataframedata.Diff();</code></br>
+<br><b>Clip: </b> Used to trim values at specified input threshold. We can use this function to put a lower limit and upper limit on the values that any cell can have in the dataframe.</br>
+<br><code>DataFrameData abs = dataframedata.Clip();</code></br>
+<br><b>Clip: </b> Return sample standard deviation over requested axis.</br>
+<br><code>DataFrameData abs = dataframedata.Std();</code></br>
