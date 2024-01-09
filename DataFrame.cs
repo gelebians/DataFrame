@@ -2,10 +2,15 @@ using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 using System.Dynamic;
 using System.Reflection;
-using Technical.System;
+using ISRA.System;
 
-namespace Technical
+namespace ISRA.Data
 {
+    /*
+     * This application is for implementing pandas dataframe in c#.
+     * There are DataFrame constructor in the DataFrame.cs file.
+     * This library was designed by PoSeYDoN.
+     */
     public partial class DataFrame : DynamicObject, IDictionary<string, DataFrameData>
     {
         private Dictionary<string, DataFrameData> _columns;
@@ -30,7 +35,7 @@ namespace Technical
             _columns = new Dictionary<string, DataFrameData>();
             for (int i = 0; i < Columns.Length; i++)
             {
-                _columns.Add(Columns[i], new DataFrameData(typeof(int),0));
+                _columns.Add(Columns[i], new DataFrameData(typeof(int), 0));
             }
         }
 
@@ -68,14 +73,14 @@ namespace Technical
             }
         }
 
-        public DataFrame(DataFrameData data,string column = null)
+        public DataFrame(DataFrameData data, string column = null)
         {
-            string columnName =(column ==null)?"A":column;
+            string columnName = (column == null) ? "A" : column;
             _columns = new Dictionary<string, DataFrameData>();
             _columns.Add(columnName, data);
         }
 
-        public DataFrame(Dictionary<string, IConvertible[]> data, string[] Columns=null)
+        public DataFrame(Dictionary<string, IConvertible[]> data, string[] Columns = null)
         {
             _columns = new Dictionary<string, DataFrameData>();
             bool datasizeaccuracy = false;
@@ -123,11 +128,11 @@ namespace Technical
             int i = 0;
             foreach (var nesne in objectlist)
             {
-                
+
                 Type tip = nesne.GetType();
                 if (tip.GetTypeInfo().IsClass)
                 {
-                    
+
                     foreach (var prop in tip.GetProperties())
                     {
                         if (_columns.ContainsKey(prop.Name))
@@ -136,10 +141,10 @@ namespace Technical
                         }
                         else
                         {
-                            _columns.Add(prop.Name, new DataFrameData(prop.PropertyType,objectlist.Count()));
+                            _columns.Add(prop.Name, new DataFrameData(prop.PropertyType, objectlist.Count()));
                             _columns[prop.Name][i] = (IConvertible?)prop.GetValue(nesne, null);
                         }
-                        
+
                     }
 
                 }
@@ -147,12 +152,12 @@ namespace Technical
             }
         }
 
-        public int Count => (_columns.Count > 0) ? _columns.First().Value.Toplam(): 0;
+        public int Count => (_columns.Count > 0) ? _columns.First().Value.Count() : 0;
 
         public ICollection<string> Keys => _columns.Keys;
 
         public ICollection<DataFrameData> Values => _columns.Values;
-        
+
         public bool IsReadOnly => _columns.ToArray().IsReadOnly;
 
         public void AddRow(IConvertible[] datas)
@@ -224,22 +229,22 @@ namespace Technical
             List<string> Rows = new List<string>();
             string titles = "";
             int j = 0;
-            foreach(var column in Columns)
+            foreach (var column in Columns)
             {
-                titles += "|"+column.Key.PadRight(30);
+                titles += "|" + column.Key.PadRight(30);
                 if (j == Columns.Count - 1)
                     titles += "|\n";
-                for(int i= 0;i < column.Value.Toplam(); i++)
+                for (int i = 0; i < column.Value.Count(); i++)
                 {
                     if (Rows.Count < i + 1)
                         Rows.Add("");
-                    Rows[i] +="|" +((column.Value[i]!=null)?column.Value[i].ToString().PadRight(30):"");
+                    Rows[i] += "|" + ((column.Value[i] != null) ? column.Value[i].ToString().PadRight(30) : "");
                     if (j == Columns.Count - 1)
                         Rows[i] += "|\n";
                 }
                 j++;
             }
-            return ("|Rows Count:"+Rows.Count+" Columns Count:"+Columns.Count).PadRight(30*Columns.Count)+new string(' ', Columns.Count * 30 + Columns.Count - 1) +"|\n"+"|" + new string('=', Columns.Count * 30 + Columns.Count - 1) + "|\n" + titles + "|" + new string('=', Columns.Count * 30 + Columns.Count - 1) + "|\n" + string.Join("", Rows) + "|" + new string('=', Columns.Count * 30 + Columns.Count - 1) + "|\n";
+            return ("|Rows Count:" + Rows.Count + " Columns Count:" + Columns.Count).PadRight(30 * Columns.Count) + new string(' ', Columns.Count * 30 + Columns.Count - 1) + "|\n" + "|" + new string('=', Columns.Count * 30 + Columns.Count - 1) + "|\n" + titles + "|" + new string('=', Columns.Count * 30 + Columns.Count - 1) + "|\n" + string.Join("", Rows) + "|" + new string('=', Columns.Count * 30 + Columns.Count - 1) + "|\n";
         }
 
 
@@ -316,7 +321,7 @@ namespace Technical
         {
             if (_columns.Count > 0)
             {
-                if (((DataFrameData)value).Toplam() == _columns.First().Value.Toplam())
+                if (((DataFrameData)value).Count() == _columns.First().Value.Count())
                 {
                     if (_columns.ContainsKey(binder.Name))
                     {
@@ -327,19 +332,19 @@ namespace Technical
                 }
                 else
                 {
-                    Genel.Loglayıcı.Error("datasin satır sayısı aynı değil");
+                    General.Logging.Error("Row numbers are not the same");
                 }
             }
             else
             {
                 _columns.Add(binder.Name, (DataFrameData)value);
             }
-            
+
 
             // You can always add a value to a dictionary,
             // so this method always returns true.
             return true;
         }
-        
+
     }
 }
