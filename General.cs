@@ -22,7 +22,15 @@ namespace ISRA.System
      .WriteTo.Debug(outputTemplate: DateTime.Now.ToString())
      .WriteTo.File("System-Logs.txt", rollingInterval: RollingInterval.Day)
      .CreateLogger();
-        public static DataFrameData Karşılaştır(DataFrameData compare, IConvertible iftrue, IConvertible iffalse)
+        /// <summary>
+        /// Implementation of the np.where function.
+        /// </summary>
+        /// <param name="compare"> compare operators</param>
+        /// <param name="iftrue"> if true</param>
+        /// <param name="iffalse"> if false</param>
+        /// <returns>DataFrameData</returns>
+        /// <exception cref="Exception"></exception>
+        public static DataFrameData Where(DataFrameData compare, IConvertible iftrue, IConvertible iffalse)
         {
             if (compare.Type == typeof(bool) && (iftrue.GetType() == iffalse.GetType()))
             {
@@ -147,7 +155,7 @@ namespace ISRA.System
         {
             if (left.IsNumeric() && right.IsNumeric() && left.Count() == right.Count())
             {
-                var cross = General.Karşılaştır(left < right, 1, 0);
+                var cross = General.Where(left < right, 1, 0);
 
                 var preview_cross = cross.ShiftLeft();
                 return (cross - preview_cross).Abs()==1;
@@ -352,6 +360,7 @@ namespace ISRA.System
         public static DataFrameData nz(this DataFrameData datas)
         {
             DataFrameData returned = new DataFrameData(datas.Type, datas.Values.Length);
+
             for (int i = 0; i < datas.Values.Length; i++)
             {
                 if (datas[i] == null && datas.IsNumeric())
@@ -361,6 +370,16 @@ namespace ISRA.System
             }
             return returned;
         }
-
+        public static DataFrameData Mean(this IEnumerable<DataFrameData> datas)
+        {
+            if (datas.Count() > 0)
+            {
+                return new DataFrameData(datas.Select(x=>x.Mean()).ToArray());
+            }
+            else
+            {
+                throw new Exception("The size of the data to be averaged must be greater than 0.");
+            }
+        }
     }
 }
