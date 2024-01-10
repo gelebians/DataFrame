@@ -68,7 +68,7 @@ In this example, a new column named col1 has been added.
 <br>The value of the data can be changed with the indexing method. ex:</br>
 <br><code>dataframe["col1",3] = 12;</code></br>
 <h1>DataFrameData</h1>
-<br>This is the most comprehensive object. Mathematical operations, comparison, averaging and square root operations can be performed with DataFrameData.</br>
+<br>This is the most comprehensive object. Mathematical operations, comparison, averaging and square root operations can be performed with DataFrameData. All data types used must be of nullable type. Example: new DataFrameData(new int?[5])</br>
 <h2>Usage Methods</h2>
 <b>Creation</b>
 <br>Create by specifying type and size</br>
