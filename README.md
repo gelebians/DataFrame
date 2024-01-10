@@ -156,10 +156,10 @@ DataFrameData newDataFrameData = dataframedata1++;
 </code></br>
 <h2>Examples</h2>
 <br><code>DataFrame dataframe = new DataFrame();
-dataframe["T"] = new DataFrameData(new DateTime[5]{DateTime.Parse("01.01.2024","02.01.2024","03.01.2024","04.01.2024","05.01.2024"});
-dataframe["high"] = new DataFrameData(new decimal[5]{"5.12,6.25,5.13,8.26,15});
-dataframe["low"] = new DataFrameData(new decimal[5]{"4.48,5.15,3.27,7.55,11,45});
-dataframe["close"] = new DataFrameData(new decimal[5]{"4.51,5.18,3.51,7.99,13,74});
+dataframe["T"] = new DataFrameData(new DateTime?[5]{DateTime.Parse("01.01.2024","02.01.2024","03.01.2024","04.01.2024","05.01.2024"});
+dataframe["high"] = new DataFrameData(new decimal?[5]{"5.12,6.25,5.13,8.26,15});
+dataframe["low"] = new DataFrameData(new decimal?[5]{"4.48,5.15,3.27,7.55,11,45});
+dataframe["close"] = new DataFrameData(new decimal?[5]{"4.51,5.18,3.51,7.99,13,74});
 dataframe["hl2"] = (dataframe["high"]+dataframe["low"])/2;
 
 //Calculate 10 days sma
