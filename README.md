@@ -50,6 +50,8 @@ dataframe.AddRow(3,row2); // by giving line number
 <br><code>dataframe.Clear();</code></br>
 <br><b>Rename: </b> Replaces the column name with the new name. It must be in Dictionary&lt;string,string> format.</br>
 <br><code>dataframe.Rename(new Dictionary&lt;string,string>(){{"col1","newcol1"},{"col2","newcoll2"}};</code></br>
+<br><b>Short: </b> Reorder all rows with given column name.</br>
+<br><code>dataframe.Short("T",ShortSide.Desc);</code></br>
 <h2>Indexing</h2>
 <br><b>DataFrameData this[string collname]: </b> Returns the column called column as Dataframedata.</br>
 <br><code>var dataframe2 = dataframe1["coll1"];</code></br>
@@ -126,11 +128,25 @@ List&lt;DataFrameData> datalist = dataframedata.Rolling(5);</code></br>
 <br><b>Abs: </b> Returns the absolute value of a number</br>
 <br><code>DataFrameData abs = dataframedata.Abs();</code></br>
 <br><b>Diff: </b> Find the difference between the values for each row and the values from the previous row</br>
-<br><code>DataFrameData abs = dataframedata.Diff();</code></br>
+<br><code>DataFrameData diff = dataframedata.Diff();</code></br>
 <br><b>Clip: </b> Used to trim values at specified input threshold. We can use this function to put a lower limit and upper limit on the values that any cell can have in the dataframe.</br>
-<br><code>DataFrameData abs = dataframedata.Clip();</code></br>
+<br><code>DataFrameData clip = dataframedata.Clip();</code></br>
 <br><b>Std: </b> Return sample standard deviation over requested axis.</br>
-<br><code>DataFrameData abs = dataframedata.Std();</code></br>
+<br><code>DataFrameData std = dataframedata.Std();</code></br>
+<br><b>Join: </b> merge existing DataFrameData with DataFrameData given in parameter</br>
+<br><code>DataFrameData joins = dataframedata.Join(dataframedata2,"both");</code></br>
+<br><b>Ewm: </b> ewm method used in pandas.dataframe</br>
+<br><code>DataFrameData ewm = dataframedata.Ewm(21);</code></br>
+<br><b>Sma: </b> sma indicator</br>
+<br><code>DataFrameData sma = dataframedata.Sma(50);</code></br>
+<br><b>Ema: </b> ema indicator</br>
+<br><code>DataFrameData ema = dataframedata.Ema(17);</code></br>
+<br><b>Wma: </b> wma indicator</br>
+<br><code>DataFrameData wma = dataframedata.Wma(18);</code></br>
+<br><b>Hma: </b> hma indicator</br>
+<br><code>DataFrameData hma = dataframedata.Hma(18);</code></br>
+<br><b>StockRsi: </b> stochastic rsi indicator</br>
+<br><code>DataFrameData stock = dataframedata.StockRsi(14,3);</code></br>
 <h2>Indexing</h2>
 <br>Returns the data given the index number</br>
 <br><code>IConvertible data = dataframedata[1];</code></br>
