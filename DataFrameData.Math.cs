@@ -170,5 +170,99 @@ namespace ISRA.Data
                 return null;
             }
         }
+        /// <summary>
+        /// Usage of pandas ewm function in this library
+        /// </summary>
+        /// <param name="periot">window size</param>
+        /// <param name="alpha"> coefficient</param>
+        /// <returns>DataFrameData</returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public DataFrameData Ewm(int periot, double alpha = 0.2)
+        {
+            DataFrameData ewm = new DataFrameData(Type, Count());
+            ewm[0] = this[0];
+            for (int i = 1; i < Count(); ++i)
+            {
+                ewm[i] = _data switch
+                {
+                    int?[] veri => alpha * veri[i] + (1 - alpha) * (dynamic)ewm[i - 1],
+                    float?[] veri => alpha * veri[i] + (1 - alpha) * (dynamic)ewm[i - 1],
+                    double?[] veri => alpha * veri[i] + (1 - alpha) * (dynamic)ewm[i - 1],
+                    decimal?[] veri => Convert.ToDecimal(alpha) * veri[i] + Convert.ToDecimal(1 - alpha) * (dynamic)ewm[i - 1],
+                    _ => throw new NotImplementedException("Clipping cannot be done with this data type.")
+                };
+                
+            }
+            return ewm;
+        }
+        /// <summary>
+        /// sma indicator
+        /// </summary>
+        /// <param name="periot"> window size</param>
+        /// <returns></returns>
+        public DataFrameData Sma(int periot)
+        {
+            return this.Rolling(periot).Mean();
+        }
+        /// <summary>
+        /// ema indicator
+        /// </summary>
+        /// <param name="periot">window size</param>
+        /// <returns></returns>
+        public DataFrameData Ema(int periot)
+        {
+            return this.Rolling(periot).Ema(15);
+        }
+        /// <summary>
+        /// wma indicator
+        /// </summary>
+        /// <param name="periot"></param>
+        /// <returns></returns>
+        public DataFrameData Wma(int periot)
+        {
+            DataFrameData weight = new DataFrameData(Type, periot);
+
+            for (int i = 0; i < periot; i++)
+            {
+                weight[i] = i + 1;
+            }
+            return this.Rolling(periot).Wma(periot,weight);
+        }
+        /// <summary>
+        /// Rsi indicator
+        /// </summary>
+        /// <param name="periot"></param>
+        /// <returns></returns>
+        public DataFrameData Rsi(int periot)
+        {
+            var delta = this.Diff();
+
+            var top = delta.Clip(top: 0);
+            var bottom = delta.Clip(top: 0) * -1;
+            var maTop = top.Sma(periot);
+            var maBottom = bottom.Sma(periot);
+            var RS = maTop / maBottom;
+            return 100m - (100m / (RS + 1));
+        }
+        /// <summary>
+        /// hma indicator
+        /// </summary>
+        /// <param name="periot"> window size</param>
+        /// <returns>DataFrameData</returns>
+        public DataFrameData Hma(int periot)
+        {
+            return (this.Wma(periot / 2) * 2 - this.Wma(periot)).Wma((int)Math.Sqrt(periot));
+        }
+        /// <summary>
+        /// Stochastic rsi indicator
+        /// </summary>
+        /// <param name="periot">window size</param>
+        /// <param name="smooth"> smooth size</param>
+        /// <returns>DataFrameData</returns>
+        public DataFrameData StockRsi(int periot,int smooth)
+        {
+            var rsi = this.Rsi(periot);
+            return (rsi - rsi.Rolling(smooth).Mean()) / rsi.Rolling(smooth).Std();
+        }
     };
 }
