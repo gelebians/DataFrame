@@ -231,20 +231,21 @@ namespace ISRA.Data
             int j = 0;
             foreach (var column in Columns)
             {
-                titles += "|" + column.Key.PadRight(30);
+                titles += "|" + column.Key.PadRight(20);
                 if (j == Columns.Count - 1)
                     titles += "|\n";
                 for (int i = 0; i < column.Value.Count(); i++)
                 {
                     if (Rows.Count < i + 1)
                         Rows.Add("");
-                    Rows[i] += "|" + ((column.Value[i] != null) ? column.Value[i].ToString().PadRight(30) : "");
+                    Rows[i] += "|" + ((column.Value[i] != null) ? column.Value[i].ToString().PadRight(20) : "");
                     if (j == Columns.Count - 1)
                         Rows[i] += "|\n";
                 }
                 j++;
             }
-            return ("|Rows Count:" + Rows.Count + " Columns Count:" + Columns.Count).PadRight(30 * Columns.Count) + new string(' ', Columns.Count * 30 + Columns.Count - 1) + "|\n" + "|" + new string('=', Columns.Count * 30 + Columns.Count - 1) + "|\n" + titles + "|" + new string('=', Columns.Count * 30 + Columns.Count - 1) + "|\n" + string.Join("", Rows) + "|" + new string('=', Columns.Count * 30 + Columns.Count - 1) + "|\n";
+            List<int> ass = new List<int>();
+            return ("|Rows Count:" + Rows.Count + " Columns Count:" + Columns.Count).PadRight(20 * Columns.Count) + new string(' ', Columns.Count * 20 + Columns.Count - 1) + "|\n" + "|" + new string('=', Columns.Count * 20 + Columns.Count - 1) + "|\n" + titles + "|" + new string('=', Columns.Count * 20 + Columns.Count - 1) + "|\n" + string.Join("", Rows) + "|" + new string('=', Columns.Count * 20 + Columns.Count - 1) + "|\n";
         }
 
 
@@ -340,11 +341,32 @@ namespace ISRA.Data
                 _columns.Add(binder.Name, (DataFrameData)value);
             }
 
-
+            
             // You can always add a value to a dictionary,
             // so this method always returns true.
             return true;
         }
-
+        public void Short(string column,ShortSide side = ShortSide.Asc)
+        {
+            if (_columns.Count > 0)
+            {
+                var previewData = _columns[column];
+                var newData = _columns[column].Short(side);
+                for(int i=0;Count > i;i++)
+                {
+                    int newIndex = newData.index(previewData[i]);
+                    foreach(var key in _columns.Keys)
+                    {
+                        var temp = this[key, i];
+                        this[key, i] = this[key, newIndex];
+                        this[key, newIndex] = temp;
+                    }
+                }
+            }
+            else
+            {
+                throw new Exception("number of columns must be greater than 0");
+            }
+        }
     }
 }
