@@ -264,5 +264,9 @@ namespace ISRA.Data
             var rsi = this.Rsi(periot);
             return (rsi - rsi.Rolling(smooth).Mean()) / rsi.Rolling(smooth).Std();
         }
+        public DataFrameData Std(int periot)
+        {
+            return this.Rolling(periot).Std();
+        }
     };
 }
