@@ -240,9 +240,9 @@ namespace ISRA.System
             return sonuc;
         }
 
-        public static T[] RemoveArray<T>(T[] array,int index)
+        public static T?[] RemoveArray<T>(T?[] array,int index)
         {
-            T[] array2=new T[array.Length-1];
+            T?[] array2=new T?[array.Length-1];
             for (int i = 0; i < array2.Length; i++)
             {
                 if (i < index)
@@ -256,21 +256,21 @@ namespace ISRA.System
             }
             return array2;
         }
-        public static T[] AddArray<T>(T[] array, IConvertible? veri)
+        public static T?[] AddArray<T>(T?[] array, IConvertible? veri)
         {
-            T[] array2 = new T[array.Length + 1];
+            T?[] array2 = new T?[array.Length + 1];
             for (int i = 0; i < array2.Length; i++)
             {
                 if (i == array.Length)
-                    array2[i] = (T)veri;
+                    array2[i] = (T?)veri;
                 else
                     array2[i] = array[i];
             }
             return array2;
         }
-        public static T[] AddArray<T>(T[] array,int index, IConvertible? veri)
+        public static T?[] AddArray<T>(T?[] array,int index, IConvertible? veri)
         {
-            T[] array2 = new T[array.Length + 1];
+            T?[] array2 = new T?[array.Length + 1];
             for (int i = 0; i < array2.Length; i++)
             {
                 if (i < index)
@@ -278,7 +278,7 @@ namespace ISRA.System
                     array2[i] = array[i];
                 }else if (i == index)
                 {
-                    array2[i] = (T)veri;
+                    array2[i] = (T?)veri;
                 }
                 else
                 {
@@ -287,12 +287,20 @@ namespace ISRA.System
             }
             return array2;
         }
-        /// <summary>
-        /// Returns the value of type enum with its name
-        /// </summary>
-        /// <param name="eff">element of type enum</param>
-        /// <returns></returns>
-        public static String convertToString(this Enum eff)
+        public static Array ShiftLeft(this Array array,int counter =1) => array switch
+        {
+            int?[] int1 => General.ArrayJoin(new int?[counter], int1.Take(int1.Count() - counter).ToArray()),
+            float?[] float1 => General.ArrayJoin(new float?[counter], float1.Take(float1.Count() - counter).ToArray()),
+            double?[] double1 => General.ArrayJoin(new double?[counter], double1.Take(double1.Count() - counter).ToArray()),
+            decimal?[] decimal1 => General.ArrayJoin(new decimal?[counter], decimal1.Take(decimal1.Count() - counter).ToArray()),
+            _ => throw new NotImplementedException("Unrecognized data type")
+        };
+    /// <summary>
+    /// Returns the value of type enum with its name
+    /// </summary>
+    /// <param name="eff">element of type enum</param>
+    /// <returns></returns>
+    public static String convertToString(this Enum eff)
         {
             return Enum.GetName(eff.GetType(), eff);
         }
@@ -388,5 +396,60 @@ namespace ISRA.System
                 throw new Exception("The size of the data to be averaged must be greater than 0.");
             }
         }
+        public static DataFrameData Ema(this IEnumerable<DataFrameData> datas,int periot)
+        {
+            if (datas.Count() > 0)
+            {
+                DataFrameData returned = new DataFrameData(datas.First().Type, datas.Count());
+                int i = 0;
+                foreach (var item in datas)
+                {
+                    returned[i] = item.Ewm(periot).Mean();
+                    i++;
+                }
+                return returned;
+            }
+            else
+            {
+                throw new Exception("The size of the data to be averaged must be greater than 0.");
+            }
+        }
+        public static DataFrameData Wma(this IEnumerable<DataFrameData> datas,int periot, DataFrameData weight)
+        {
+            if (datas.Count() > 0)
+            {
+                DataFrameData returned = new DataFrameData(datas.First().Type, datas.Count());
+                int i = 0;
+                foreach (var item in datas)
+                {
+                    returned[i] = (dynamic?)(item * weight).Sum() / (dynamic?)weight.Sum();
+                    i++;
+                }
+                return returned;
+            }
+            else
+            {
+                throw new Exception("The size of the data to be averaged must be greater than 0.");
+            }
+        }
+        public static DataFrameData Std(this IEnumerable<DataFrameData> datas)
+        {
+            if (datas.Count() > 0)
+            {
+                DataFrameData returned = new DataFrameData(datas.First().Type, datas.Count());
+                int i = 0;
+                foreach (var item in datas)
+                {
+                    returned[i] = item.Std();
+                    i++;
+                }
+                return returned;
+            }
+            else
+            {
+                throw new Exception("The size of the data to be averaged must be greater than 0.");
+            }
+        }
     }
+    public enum ShortSide { Asc,Desc }
 }
